@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROUNDERS 모닝 커피챗 시스템 정비 — 브레인스토밍</title>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --amber:   #F0A830;
+      --dark:    #1A1A1A;
+      --ivory:   #F0EDE8;
+      --mid:     #555555;
+      --light:   #888888;
+      --red:     #CC4444;
+      --white:   #FFFFFF;
+      --border:  #DDDDDD;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background: var(--ivory);
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 48px 24px;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    /* Cover */
+    .cover {
+      background: var(--dark);
+      padding: 52px 48px 44px;
+    }
+    .cover-brand {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--amber);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .cover-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .cover-title span { color: var(--amber); }
+    .cover-sub {
+      font-size: 14px;
+      font-weight: 300;
+      color: #AAAAAA;
+      margin-bottom: 4px;
+    }
+    .cover-meta {
+      font-size: 12px;
+      color: #666666;
+    }
+    .cover-bar {
+      height: 3px;
+      background: var(--amber);
+      margin-top: 28px;
+    }
+
+    /* Body */
+    .body { padding: 0 48px 56px; }
+
+    /* Section */
+    .section { margin-top: 44px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .section-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--amber);
+      opacity: 0.5;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: var(--amber);
+      color: var(--dark);
+      font-weight: 600;
+      padding: 9px 12px;
+      text-align: left;
+    }
+    tbody tr:nth-child(odd)  { background: var(--white); }
+    tbody tr:nth-child(even) { background: var(--ivory); }
+    tbody td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    /* Loop table */
+    .loop-table thead th { background: var(--dark); color: var(--white); }
+    .loop-table .step-num { color: var(--amber); font-weight: 700; text-align: center; }
+
+    /* Bullet list */
+    .bullet-list { list-style: none; }
+    .bullet-list li {
+      font-size: 13px;
+      color: var(--mid);
+      padding: 4px 0 4px 18px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .bullet-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+      font-weight: 700;
+    }
+
+    /* Sub header */
+    .sub-header {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      margin: 18px 0 8px;
+    }
+
+    /* Do/Don't grid */
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .do-dont-head {
+      padding: 9px 14px;
+      font-weight: 600;
+      color: var(--white);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+    }
+    .do-head  { background: var(--dark); }
+    .dont-head { background: var(--red); }
+    .do-dont-body {
+      padding: 14px;
+      line-height: 1.7;
+    }
+    .do-body   { background: var(--ivory); }
+    .dont-body { background: #FFF5F5; }
+    .do-dont-body li {
+      list-style: none;
+      padding-left: 14px;
+      position: relative;
+      color: var(--mid);
+      margin-bottom: 4px;
+    }
+    .do-dont-body li::before { content: '•'; position: absolute; left: 0; color: inherit; }
+    .do-body li::before   { color: var(--dark); }
+    .dont-body li::before { color: var(--red); }
+
+    /* Insight box */
+    .insight {
+      background: var(--ivory);
+      border-left: 3px solid var(--amber);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--mid);
+      margin-top: 12px;
+      line-height: 1.65;
+    }
+
+    /* Differentiator box */
+    .diff-box {
+      background: var(--dark);
+      color: var(--white);
+      padding: 18px 20px;
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+    .diff-box strong { color: var(--amber); }
+
+    /* Footer */
+    .footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--light);
+    }
+
+    /* Status pill */
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .pill-ok     { background: #E6F4EA; color: #2D6A35; }
+    .pill-missing { background: #FDECEA; color: var(--red); }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="cover-brand">ROUNDERS</div>
+    <div class="cover-title">모닝 커피챗<br><span>시스템 정비</span></div>
+    <div class="cover-sub">브레인스토밍 결과물</div>
+    <div class="cover-meta">2026-05-20 &nbsp;·&nbsp; Roseshaker × ROUNDERS</div>
+    <div class="cover-bar"></div>
+  </div>
+
+  <div class="body">
+
+    <!-- 01 현황 파악 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <span class="section-title">현황 파악</span>
+        <div class="section-line"></div>
+      </div>
+      <table>
+        <thead><tr><th style="width:28%">항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>운영 빈도</td><td>주 3회 이하</td></tr>
+          <tr><td>공지 채널</td><td>Instagram 스토리 + 카카오톡 단체톡방</td></tr>
+          <tr><td>주요 문제</td><td>새 얼굴 유입 부족 및 순환 미비, 인스타그램 팔로워 증가 저조</td></tr>
+          <tr><td>경쟁 커뮤니티</td><td>SMCC 등 유사 아침 모임 포맷</td></tr>
+          <tr><td>목표</td><td>팔로워 증가 속도 개선, 멤버 간 관계망 활성화</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 02 방향성 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <span class="section-title">방향성</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="insight">
+        <strong style="color:var(--dark)">건강하고 느슨한 연대</strong> 지향의 관계 중심 커뮤니티 + 콘텐츠 통합 시스템 구축.<br>
+        콘텐츠와 참여 구조를 분리하지 않고, 하나의 순환 루프로 설계한다.
+      </div>
+    </div>
+
+    <!-- 03 전체 루프 구조 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <span class="section-title">전체 루프 구조</span>
+        <div class="section-line"></div>
+      </div>
+      <table class="loop-table">
+        <thead>
+          <tr><th style="width:8%">단계</th><th style="width:34%">항목</th><th>설명</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="step-num">①</td>
+            <td>콘텐츠 게시 (Instagram)</td>
+            <td>팔로워가 '나도 가볼까?' 인식하는 외부 접점</td>
+          </tr>
+          <tr>
+            <td class="step-num">②</td>
+            <td>팔로워 → 첫 방문 인식</td>
+            <td>공지 콘텐츠를 보고 참여를 결심</td>
+          </tr>
+          <tr>
+            <td class="step-num">③</td>
+            <td>첫 방문 — 부담 없이</td>
+            <td>진입 장벽 최소화, 호스트 1인이 자연스럽게 안착</td>
+          </tr>
+          <tr>
+            <td class="step-num">④</td>
+            <td>현장 경험 → 재방문</td>
+            <td>루틴화 — 강제 없이 반복 노출로 습관 형성</td>
+          </tr>
+          <tr>
+            <td class="step-num">⑤</td>
+            <td>현장 사진 → 다시 ①로</td>
+            <td>아카이브 콘텐츠가 새로운 팔로워를 끌어오는 연료</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="insight">
+        '건강하고 느슨한 연대'는 ③과 ④ 사이에서 만들어진다. 콘텐츠는 루프를 돌리는 연료이고, 관계는 루프가 돌면서 자연스럽게 쌓이는 부산물이다.
+      </div>
+    </div>
+
+    <!-- 04 콘텐츠 전략 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <span class="section-title">콘텐츠 전략</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="sub-header">콘텐츠 3가지 역할</div>
+      <table>
+        <thead><tr><th style="width:36%">유형</th><th style="width:16%">현황</th><th>목적</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>① 공지 (Pre-event)</td>
+            <td><span class="pill pill-ok">운영 중</span></td>
+            <td>참여 결정을 돕는 것</td>
+          </tr>
+          <tr>
+            <td>② 아카이브 (Post-event)</td>
+            <td><span class="pill pill-missing">부재</span></td>
+            <td>팔로워에게 '이런 아침이 있다'를 보여줌 → 신규 유입 핵심</td>
+          </tr>
+          <tr>
+            <td>③ 일상 (Mid-week)</td>
+            <td><span class="pill pill-missing">부재</span></td>
+            <td>알고리즘 노출 + ROUNDERS가 살아있는 커뮤니티임을 증명</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sub-header" style="margin-top:20px">게시 리듬 (제안)</div>
+      <table>
+        <thead><tr><th style="width:20%">요일</th><th>콘텐츠</th></tr></thead>
+        <tbody>
+          <tr><td>월요일</td><td>이번 주 모임 공지 카드뉴스</td></tr>
+          <tr><td>수요일</td><td>지난 모임 아카이브 사진</td></tr>
+          <tr><td>금요일</td><td>일상 콘텐츠 (리그램 · 장소 소개 · 짧은 글)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 05 참여 구조 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <span class="section-title">참여 구조 개선</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="sub-header">1. 참여 경로 단순화</div>
+      <ul class="bullet-list">
+        <li>인스타그램 링크인바이오 하나로 '이번 주 모임 + 참여 방법'이 바로 보이도록</li>
+        <li>카카오 오픈채팅은 유지하되, 스토리에서 DM으로도 참여 가능하게</li>
+      </ul>
+
+      <div class="sub-header">2. 첫 방문 경험 설계</div>
+      <ul class="bullet-list">
+        <li>매 모임에 호스트 역할 1명 지정 (운영진 or 시즌 멤버)</li>
+        <li>호스트는 처음 온 사람에게 자연스럽게 말을 거는 역할만 담당</li>
+        <li>억지 소개 시간 없이, 옆에 앉아있는 사람과 커피 마시는 구조 유지</li>
+      </ul>
+
+      <div class="sub-header">3. 재방문 유도 — 의무 없이</div>
+      <ul class="bullet-list">
+        <li>참여 뱃지 · 출석 체크 같은 장치 금지 (부담감 생성)</li>
+        <li>아카이브 콘텐츠에 현장 사진을 올려서 '내가 갔던 그 날'이 기록으로 남는 느낌</li>
+        <li>같은 시간 · 장소의 반복으로 습관 형성 → 요일 · 시간 고정 루틴 강화</li>
+      </ul>
+    </div>
+
+    <!-- 06 커뮤니티 문화 원칙 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <span class="section-title">커뮤니티 문화 원칙</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="do-dont">
+        <div class="do-dont-head do-head">지킬 것</div>
+        <div class="do-dont-head dont-head">하지 말 것</div>
+        <div class="do-dont-body do-body">
+          <ul>
+            <li>모임 포맷은 계속 열린 구조 — 아는 사람 없어도 올 수 있는</li>
+            <li>관계는 반복 노출로 쌓이게 — '또 왔네요'가 자연스러운 인사가 되는 빈도 유지</li>
+            <li>콘텐츠에서 성과 · 성장 언어 완전 배제 (브랜드 금지어 준수)</li>
+          </ul>
+        </div>
+        <div class="do-dont-body dont-body">
+          <ul>
+            <li>회원 등급 · 포인트 · 출석 시스템</li>
+            <li>'이번 달 개근자' 같은 강조</li>
+            <li>모임 내 공식 소개 시간이나 명함 교환 문화</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-header" style="margin-top:20px">SMCC와의 차별점</div>
+      <div class="diff-box">
+        ROUNDERS는 이벤트가 아니라 <strong>루틴</strong>이다. '특별한 아침'이 아니라 '그냥 아침'이 반복되는 것 — 이 포지셔닝을 콘텐츠와 운영 방식 모두에서 일관되게 유지하는 것이 장기적으로 가장 강한 차별점이다.
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Roseshaker &nbsp;·&nbsp; kimhari@roseshaker.com &nbsp;·&nbsp; @roseshaker
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
